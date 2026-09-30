@@ -1,0 +1,26 @@
+# Build
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Visual Studio
+.vs/
+
+# User-specific
+*.user
+*.suo
+
+# Secrets
+appsettings.Development.json
+
+# User secrets
+secrets.json
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
