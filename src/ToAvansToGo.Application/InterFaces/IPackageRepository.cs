@@ -10,5 +10,5 @@ public interface IPackageRepository
     Task UpdatePackageAsync(Package package); 
     Task AddPackageAsync(Package package);
     Task DeletePackageAsync(Package package);
-    Task<List<Package>> GetPackagesReservedByStudentAsync(int studentId);
+
 }
