@@ -2,10 +2,20 @@
 
 namespace ToAvansToGo.Domain.Entities;
 
-public class Canteen(int id,City city, string location, bool hasHotMeals)
+public class Canteen
 {
-    public int Id { get; set; } = id;
-    public City City { get; set; } = city;
-    public string Location { get; set; } = location;
-    public bool HasHotMeals { get; set; }  = hasHotMeals;
+    public int Id { get; set; }
+    public City City { get; set; }
+    public string Location { get; set; } = string.Empty;
+    public bool HasHotMeals { get; set; }
+
+    private Canteen() { } // voor EF Core
+
+    public Canteen(int id, City city, string location, bool hasHotMeals)
+    {
+        Id = id;
+        City = city;
+        Location = location;
+        HasHotMeals = hasHotMeals;
+    }
 }
