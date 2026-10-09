@@ -53,9 +53,9 @@ public class PackageService : IPackageService
         return packages.OrderBy(p => p.PickUpTime).ToList();
     }
 
-    public Task<Package?> GetPackageByIdAsync(int id)
+    public async Task<Package?> GetPackageByIdAsync(int id)
     {
-        return _packageRepository.GetPackageByIdAsync(id);
+        return await _packageRepository.GetPackageByIdAsync(id);
     }
 
     public async Task<List<Product>> GetProductHistoryAsync(MealType mealType)
@@ -88,19 +88,19 @@ public class PackageService : IPackageService
         await _packageRepository.AddPackageAsync(package);
     }
 
-    public Task UpdatePackageAsync(Package package)
+    public async Task UpdatePackageAsync(Package package)
     {
         if (package.ReservedBy != null)
             throw new InvalidOperationException("Package is reserved and can not be edited");
 
         package.Is18Plus = package.Products.Any(p => p.HasAlcohol);
-        return _packageRepository.UpdatePackageAsync(package);
+        await _packageRepository.UpdatePackageAsync(package);
     }
 
-    public Task DeletePackageAsync(Package package)
+    public async Task DeletePackageAsync(Package package)
     {
         if (package.ReservedBy != null)
             throw new InvalidOperationException("Package is reserved and can not be deleted");
-        return _packageRepository.DeletePackageAsync(package);
+        await _packageRepository.DeletePackageAsync(package);
     }
 }
