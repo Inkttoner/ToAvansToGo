@@ -1,0 +1,75 @@
+﻿
+@model ToAvansToGo.Web.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Inloggen";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+            <div class="panel">
+                <div class="text-center mb-4">
+                    <h1>Welkom terug</h1>
+                    <p class="text-secondary">
+                        Log in op je ToAvansToGo-account.
+                    </p>
+                </div>
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      asp-route-returnUrl="@returnUrl"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email"
+                               class="form-label">
+                            E-mailadres
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="naam@avans.nl"
+                               autocomplete="username"
+                               autofocus />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password"
+                               class="form-label">
+                            Wachtwoord
+                        </label>
+
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Je wachtwoord"
+                               autocomplete="current-password" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        Inloggen
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

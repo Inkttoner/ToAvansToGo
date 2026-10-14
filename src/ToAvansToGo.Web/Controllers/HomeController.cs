@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToAvansToGo.Application.InterFaces;
 using ToAvansToGo.Domain.Enums;
@@ -9,6 +11,8 @@ public class HomeController(IPackageService packageService) : Controller
 {
     private const int PreviewCount = 3;
 
+    
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var packages = await packageService.GetPackagesAsync(City.Breda, null );

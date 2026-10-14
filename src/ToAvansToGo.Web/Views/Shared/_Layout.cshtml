@@ -22,10 +22,59 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Packages" asp-action="Index">Packages</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Packages" asp-action="Manage">My canteen</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Canteens" asp-action="Index">Canteens</a></li>
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Packages"
+                                   asp-action="Index">Packages</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Reservations"
+                                   asp-action="Index">My reservations</a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Packages"
+                                   asp-action="Index">Packages</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Packages"
+                                   asp-action="Manage">My canteen</a>
+                            </li>
+                        }
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="nav-link">
+                                        Log out
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   asp-controller="Account"
+                                   asp-action="Login">Log in</a>
+                            </li>
+                        }
                     </ul>
+                    
                 </div>
             </div>
         </nav>

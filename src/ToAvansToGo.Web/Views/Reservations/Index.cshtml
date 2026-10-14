@@ -1,0 +1,31 @@
+@model IEnumerable<Package>
+@{
+    ViewData["Title"] = "Reservations";
+}
+
+<div class="page-header">
+    <div>
+        <h1>My Reservations</h1>
+        <p>Your reservations:</p>
+    </div>
+</div>
+
+
+@if (!@Model.Any())
+{
+    <div class="empty-state">
+        <h2 class="h5">No packages found</h2>
+        <p class="mb-0">You have not reserved any packages</p>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var package in Model)
+        {
+            <div class="col">
+                <partial name="_PackageCard" model="package" />
+            </div>
+        }
+    </div>
+}

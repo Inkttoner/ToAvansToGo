@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToAvansToGo.Application.InterFaces;
 using ToAvansToGo.Domain.Entities;
 using ToAvansToGo.Domain.Enums;
+using ToAvansToGo.Infrastructure.Identity;
 using ToAvansToGo.Web.ViewModels;
 
 namespace ToAvansToGo.Web.Controllers;
@@ -10,14 +13,16 @@ public class PackagesController(
     IPackageService packageService,
     IReservationService reservationService,
     IProductRepository productRepository,
-    ICanteenRepository canteenRepository) : Controller
+    ICanteenRepository canteenRepository,
+    UserManager<ApplicationUser> userManager) : Controller
 {
-    // TODO: vervangen door de ingelogde gebruiker zodra je login hebt.
-    // Id's uit de seed-data: student 1 is 18+, student 2 is jonger dan 18; medewerker 1 werkt in kantine 1.
-    private const int CurrentStudentId = 1;
-    private const int CurrentEmployeeId = 1;
 
+    private async Task<ApplicationUser?> GetCurrentUserAsync()
+    {
+        return await userManager.GetUserAsync(User);
+    }
     // GET /Packages?city=Breda&mealType=Hot   (voor studenten: beschikbare pakketten)
+    [Authorize]
     public async Task<IActionResult> Index(City city = City.Breda, MealType? mealType = null)
     {
         var packages = await packageService.GetPackagesAsync(city, mealType);
@@ -35,17 +40,29 @@ public class PackagesController(
         return View(vm);
     }
 
-    // GET /Packages/Manage   (voor medewerkers: pakketten van de eigen kantine)
-    public async Task<IActionResult> Manage()
-    {
-        var canteen = await canteenRepository.GetCanteenByEmployeeIdAsync(CurrentEmployeeId);
-        var packages = await packageService.GetPackagesForCanteenAsync(true, canteen.Id);
+   [Authorize(Roles = "Employee")]
+public async Task<IActionResult> Manage()
+{
+    var user = await GetCurrentUserAsync();
 
-        ViewData["Canteen"] = canteen;
-        return View(packages);
+    if (user?.EmployeeId is not {} employeeId)
+    {
+        return Forbid();
     }
 
+    var canteen =
+        await canteenRepository.GetCanteenByEmployeeIdAsync(employeeId);
+
+    var packages =
+        await packageService.GetPackagesForCanteenAsync(true, canteen.Id);
+
+    ViewData["Canteen"] = canteen;
+
+    return View(packages);
+}
+
     // GET /Packages/Details/5
+    [Authorize]
     public async Task<IActionResult> Details(int id)
     {
         var package = await packageService.GetPackageByIdAsync(id);
@@ -54,12 +71,19 @@ public class PackagesController(
     }
 
     // POST /Packages/Reserve/5
+    [Authorize(Roles = "Student")]
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Reserve(int id)
     {
+        var user = await GetCurrentUserAsync();
+
+        if (user?.StudentId is not { } studentId)
+        {
+            return Forbid();
+        }  
         try
         {
-            await reservationService.ReservePackage(id, CurrentStudentId);
+            await reservationService.ReservePackage(id, studentId);
             TempData["Success"] = "The package has been reserved.";
         }
         catch (InvalidOperationException ex)
@@ -70,6 +94,7 @@ public class PackagesController(
     }
 
     // GET /Packages/Create
+    [Authorize(Roles = "Employee")]
     public async Task<IActionResult> Create()
     {
         var vm = new PackageFormViewModel
@@ -82,6 +107,7 @@ public class PackagesController(
     }
 
     // POST /Packages/Create
+    [Authorize(Roles = "Employee")]
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(PackageFormViewModel vm)
     {
@@ -91,14 +117,18 @@ public class PackagesController(
             await FillOptionsAsync(vm);
             return View(vm);
         }
-
+        var user  = await GetCurrentUserAsync();
         var products = await LoadProductsAsync(vm.SelectedProductIds);
         var package = new Package(0, vm.Name, vm.TypeOfMeal, products, vm.PickUpTime, vm.AvailableTill, vm.Price, null);
 
+        if (user?.EmployeeId is not { } employeeId)
+        {
+            return Forbid();
+        }
         try
         {
             // De service zet de ophaallocatie (kantine van de medewerker) en Is18Plus
-            await packageService.CreatePackageAsync(package, CurrentEmployeeId);
+            await packageService.CreatePackageAsync(package, employeeId);
         }
         catch (InvalidOperationException ex)
         {
@@ -112,6 +142,7 @@ public class PackagesController(
     }
 
     // GET /Packages/Edit/5
+    [Authorize(Roles = "Employee")]
     public async Task<IActionResult> Edit(int id)
     {
         var package = await packageService.GetPackageByIdAsync(id);
@@ -138,6 +169,7 @@ public class PackagesController(
     }
 
     // POST /Packages/Edit/5
+    [Authorize(Roles = "Employee")]
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, PackageFormViewModel vm)
     {
@@ -178,6 +210,7 @@ public class PackagesController(
     }
 
     // GET /Packages/Delete/5
+    [Authorize(Roles = "Employee")]
     public async Task<IActionResult> Delete(int id)
     {
         var package = await packageService.GetPackageByIdAsync(id);
@@ -186,6 +219,7 @@ public class PackagesController(
     }
 
     // POST /Packages/Delete/5
+    [Authorize(Roles = "Employee")]
     [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
