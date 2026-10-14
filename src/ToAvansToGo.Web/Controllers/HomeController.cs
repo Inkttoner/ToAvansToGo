@@ -1,24 +1,30 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using ToAvansToGo.Web.Models;
+using ToAvansToGo.Application.InterFaces;
+using ToAvansToGo.Domain.Enums;
+using ToAvansToGo.Web.ViewModels;
 
 namespace ToAvansToGo.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(IPackageService packageService) : Controller
 {
-    public IActionResult Index()
+    private const int PreviewCount = 3;
+
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var packages = await packageService.GetPackagesAsync(City.Breda, null );
+
+        foreach (var package in packages)
+        {
+            package.Products = await packageService.GetProductHistoryAsync(package.TypeOfMeal);
+        }
+        
+        var vm = new HomeViewModel
+        {
+            AvailableCount = packages.Count,
+            Packages = packages.Take(PreviewCount).ToList()
+        };
+        return View(vm);
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult Error() => View();
 }

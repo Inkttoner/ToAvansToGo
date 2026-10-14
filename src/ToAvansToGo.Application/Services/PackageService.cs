@@ -21,7 +21,7 @@ public class PackageService : IPackageService
     public async Task<List<Package>> GetPackagesAsync(City city, MealType? mealType)
     {
         var packages = await _packageRepository.GetPackages();
-        var result = packages.Where(p => p.PickUpLocation?.City == city && p.ReservedBy == null);
+        var result = packages.Where(p => p.PickUpLocation?.City == city && p.ReservedBy == null && p.AvailableTill > DateTime.Now);
 
         if (mealType != null)
         {

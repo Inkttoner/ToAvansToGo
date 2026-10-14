@@ -1,31 +1,266 @@
-html {
-  font-size: 14px;
+/* =====================================================================
+   THEMA: pas alleen dit blok aan om de hele site om te kleuren.
+   (Ontworpen voor een lichte achtergrond en een donkere tekstkleur.)
+   ===================================================================== */
+:root {
+  --color-background: #F3F8F1;   /* achtergrond van de pagina (lichte groentint) */
+  --color-text:       #2F3A34;   /* tekst en koppen (donkergrijs) */
+  --color-button:     #2E7D32;   /* hoofdknoppen, links en focus (groen) */
+  --color-accent-1:   #F28C28;   /* accent 1: oranje (labels, kaartrand) */
+  --color-accent-2:   #F6C945;   /* accent 2: geel (18+ label, markeringen) */
+
+  --font-main: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Afgeleide kleuren: worden automatisch berekend uit het blok hierboven */
+:root {
+  --color-surface:      color-mix(in srgb, var(--color-background) 35%, #fff);
+  --color-border:       color-mix(in srgb, var(--color-text) 14%, var(--color-background));
+  --color-muted:        color-mix(in srgb, var(--color-text) 62%, var(--color-background));
+  --color-button-hover: color-mix(in srgb, var(--color-button) 82%, #000);
+  --color-on-button:    #fff;
+  --color-on-accent-1:  var(--color-text);
+  --color-on-accent-2:  var(--color-text);
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+/* Bootstrap laten meekleuren met het thema */
+:root {
+  --bs-body-bg: var(--color-background);
+  --bs-body-color: var(--color-text);
+  --bs-body-font-family: var(--font-main);
+  --bs-border-color: var(--color-border);
+  --bs-secondary-color: var(--color-muted);
 }
 
 body {
-  margin-bottom: 60px;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  line-height: 1.6;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+h1, h2, h3, h4, h5 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.75rem); }
+
+main a:not(.btn) { color: var(--color-button); text-underline-offset: 3px; }
+main a:not(.btn):hover { color: var(--color-button-hover); }
+
+:focus-visible { outline: 3px solid var(--color-button); outline-offset: 2px; }
+
+/* ---------- Knoppen ---------- */
+.btn { font-weight: 700; border-radius: 10px; }
+
+.btn-primary {
+  --bs-btn-bg: var(--color-button);
+  --bs-btn-border-color: var(--color-button);
+  --bs-btn-color: var(--color-on-button);
+  --bs-btn-hover-bg: var(--color-button-hover);
+  --bs-btn-hover-border-color: var(--color-button-hover);
+  --bs-btn-hover-color: var(--color-on-button);
+  --bs-btn-active-bg: var(--color-button-hover);
+  --bs-btn-active-border-color: var(--color-button-hover);
+  --bs-btn-active-color: var(--color-on-button);
+  --bs-btn-disabled-bg: var(--color-button);
+  --bs-btn-disabled-border-color: var(--color-button);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.btn-outline-primary {
+  --bs-btn-color: var(--color-button);
+  --bs-btn-border-color: var(--color-button);
+  --bs-btn-hover-bg: var(--color-button);
+  --bs-btn-hover-border-color: var(--color-button);
+  --bs-btn-hover-color: var(--color-on-button);
+  --bs-btn-active-bg: var(--color-button-hover);
+  --bs-btn-active-border-color: var(--color-button-hover);
+  --bs-btn-active-color: var(--color-on-button);
+}
+
+/* ---------- Navigatie ---------- */
+.site-nav {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.site-nav .navbar-brand { color: var(--color-text); font-weight: 800; letter-spacing: -0.02em; }
+.site-nav .brand-dot { color: var(--color-button); }
+.site-nav .nav-link { color: var(--color-text); font-weight: 600; }
+.site-nav .nav-link:hover { color: var(--color-button); }
+
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: .9rem;
+}
+
+/* ---------- Formulieren ---------- */
+.form-control, .form-select {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  border-radius: 10px;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-button);
+  box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--color-button) 25%, transparent);
+}
+.form-check-input:checked {
+  background-color: var(--color-button);
+  border-color: var(--color-button);
+}
+.form-label { font-weight: 700; }
+
+/* ---------- Labels (tags) ---------- */
+.tag {
+  display: inline-block;
+  padding: .15rem .65rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+}
+.tag-accent-1 { background: var(--color-accent-1); color: var(--color-on-accent-1); }
+.tag-accent-2 { background: var(--color-accent-2); color: var(--color-on-accent-2); }
+.tag-outline  { border: 1px solid var(--color-border); color: var(--color-muted); }
+
+/* ---------- Pagina-opbouw ---------- */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.page-header p { margin: .25rem 0 0; color: var(--color-muted); }
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.empty-state {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: 14px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+/* ---------- Filterbalk ---------- */
+.filter-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; margin-bottom: 2rem; }
+.filter-bar > div { min-width: 12rem; }
+
+/* ---------- Home ---------- */
+.hero { padding: 3rem 0 2rem; max-width: 46rem; }
+.hero .lead { color: var(--color-muted); margin: 1rem 0 1.5rem; }
+.hero-note {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  padding: .3rem .85rem;
+  border-radius: 999px;
+  background: var(--color-accent-2);
+  color: var(--color-on-accent-2);
+  font-weight: 700;
+}
+.steps { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-top: 2rem; }
+.step { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 14px; padding: 1.25rem; }
+.step-number {
+  display: inline-grid; place-items: center;
+  width: 2rem; height: 2rem; margin-bottom: .75rem;
+  border-radius: 50%;
+  background: var(--color-accent-1); color: var(--color-on-accent-1);
+  font-weight: 800;
+}
+
+/* ---------- Pakketkaarten ---------- */
+.package-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 5px solid var(--color-accent-1);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+.package-card.is-reserved { border-top-color: var(--color-border); opacity: .7; }
+.package-card__tags { display: flex; gap: .4rem; flex-wrap: wrap; }
+.package-card__title { margin: 0; font-size: 1.25rem; }
+.package-card__meta { margin: 0; color: var(--color-muted); font-size: .92rem; }
+.package-card__footer {
+  margin-top: auto;
+  padding-top: .75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+.price { font-size: 1.4rem; font-weight: 800; }
+
+/* ---------- Details ---------- */
+.detail-list { display: grid; grid-template-columns: max-content 1fr; gap: .6rem 1.25rem; margin: 0; }
+.detail-list dt { color: var(--color-muted); font-weight: 600; }
+.detail-list dd { margin: 0; font-weight: 600; }
+.product-list li { padding: .5rem 0; border-bottom: 1px solid var(--color-border); }
+.product-list li:last-child { border-bottom: 0; }
+
+
+
+.package-card__photos {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .75rem;
+}
+
+.package-card__photo {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: .5rem;
+  background: var(--color-background);
+}
+
+.package-card__more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: .5rem;
+  font-weight: 700;
+  border: 1px dashed currentColor;
+  opacity: .7;
+}
+
+.product-list__item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem 0;
+}
+
+.product-list__photo {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: .5rem;
+  flex-shrink: 0;
+}
+
+.product-check__photo {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: .35rem;
+  margin-right: .35rem;
+  vertical-align: middle;
+}
+
+.preview { margin: 3rem 0; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
 }

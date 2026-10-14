@@ -1,0 +1,19 @@
+@model PackageFormViewModel
+@{
+    ViewData["Title"] = "New package";
+}
+
+<div class="page-header">
+    <div>
+        <a asp-action="Manage">Back to packages</a>
+        <h1 class="mt-2">New package</h1>
+    </div>
+</div>
+
+<form asp-action="Create" method="post" class="panel">
+    <partial name="_PackageFields" model="Model" />
+    <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">Save package</button>
+        <a class="btn btn-outline-primary" asp-action="Manage">Cancel</a>
+    </div>
+</form>

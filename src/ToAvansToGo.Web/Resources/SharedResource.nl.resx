@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Packages" xml:space="preserve"><value>Pakketten</value></data>
+  <data name="My canteen" xml:space="preserve"><value>Mijn kantine</value></data>
+  <data name="Canteens" xml:space="preserve"><value>Kantines</value></data>
+  <data name="Language" xml:space="preserve"><value>Taal</value></data>
+  <data name="Open menu" xml:space="preserve"><value>Menu openen</value></data>
+  <data name="ToAvansToGo, meal packages from the canteen" xml:space="preserve"><value>ToAvansToGo, maaltijdpakketten uit de kantine</value></data>
+  <data name="Now 1 package available" xml:space="preserve"><value>Nu 1 pakket beschikbaar</value></data>
+  <data name="Now {0} packages available" xml:space="preserve"><value>Nu {0} pakketten beschikbaar</value></data>
+  <data name="Food that's left over, for a small price." xml:space="preserve"><value>Eten dat over is, voor een kleine prijs.</value></data>
+  <data name="Reserve a package from the canteen and pick it up before it's gone." xml:space="preserve"><value>Reserveer een pakket van de kantine en haal het op voordat het weg is.</value></data>
+  <data name="View packages" xml:space="preserve"><value>Bekijk pakketten</value></data>
+  <data name="How it works" xml:space="preserve"><value>Zo werkt het</value></data>
+  <data name="Choose a package" xml:space="preserve"><value>Kies een pakket</value></data>
+  <data name="See which packages are waiting in your canteen." xml:space="preserve"><value>Bekijk welke pakketten er in jouw kantine klaarstaan.</value></data>
+  <data name="Reserve it" xml:space="preserve"><value>Reserveer het</value></data>
+  <data name="Packages with alcohol are only for students aged 18 or older." xml:space="preserve"><value>Pakketten met alcohol zijn alleen voor studenten van 18 jaar of ouder.</value></data>
+  <data name="Pick it up" xml:space="preserve"><value>Haal het op</value></data>
+  <data name="Come by at the pick-up time and bring your student card." xml:space="preserve"><value>Kom langs op het ophaaltijdstip en neem je studentenkaart mee.</value></data>
+  <data name="Something went wrong" xml:space="preserve"><value>Er ging iets mis</value></data>
+  <data name="The page could not be loaded. Please try again." xml:space="preserve"><value>De pagina kon niet worden geladen. Probeer het opnieuw.</value></data>
+  <data name="Go to the homepage" xml:space="preserve"><value>Naar de homepagina</value></data>
+  <data name="Pick up your packages here." xml:space="preserve"><value>Hier kun je je pakketten ophalen.</value></data>
+  <data name="There are no canteens yet." xml:space="preserve"><value>Er zijn nog geen kantines.</value></data>
+  <data name="Hot meals" xml:space="preserve"><value>Warme maaltijden</value></data>
+  <data name="No hot meals" xml:space="preserve"><value>Geen warme maaltijden</value></data>
+  <data name="Available packages in your city." xml:space="preserve"><value>Beschikbare pakketten in jouw stad.</value></data>
+  <data name="City" xml:space="preserve"><value>Stad</value></data>
+  <data name="Meal type" xml:space="preserve"><value>Type maaltijd</value></data>
+  <data name="All types" xml:space="preserve"><value>Alle typen</value></data>
+  <data name="Apply filter" xml:space="preserve"><value>Filter toepassen</value></data>
+  <data name="No packages found" xml:space="preserve"><value>Geen pakketten gevonden</value></data>
+  <data name="There are no packages available with these filters. Try another city or meal type." xml:space="preserve"><value>Er staan nu geen pakketten klaar met deze filters. Probeer een andere stad of maaltijd.</value></data>
+  <data name="Packages at {0}" xml:space="preserve"><value>Pakketten van {0}</value></data>
+  <data name="Reserved packages are shown here too." xml:space="preserve"><value>Hier zie je ook gereserveerde pakketten.</value></data>
+  <data name="New package" xml:space="preserve"><value>Nieuw pakket</value></data>
+  <data name="There are no packages yet" xml:space="preserve"><value>Er zijn nog geen pakketten</value></data>
+  <data name="Create the first package so students can reserve it." xml:space="preserve"><value>Maak het eerste pakket aan zodat studenten het kunnen reserveren.</value></data>
+  <data name="Reserved" xml:space="preserve"><value>Gereserveerd</value></data>
+  <data name="Location not known yet" xml:space="preserve"><value>Locatie nog niet bekend</value></data>
+  <data name="Pick-up from {0}" xml:space="preserve"><value>Ophalen vanaf {0}</value></data>
+  <data name="{0} product" xml:space="preserve"><value>{0} product</value></data>
+  <data name="{0} products" xml:space="preserve"><value>{0} producten</value></data>
+  <data name="View" xml:space="preserve"><value>Bekijk</value></data>
+  <data name="Bread" xml:space="preserve"><value>Brood</value></data>
+  <data name="Hot" xml:space="preserve"><value>Warm</value></data>
+  <data name="Drinks" xml:space="preserve"><value>Drankjes</value></data>
+  <data name="Breda" xml:space="preserve"><value>Breda</value></data>
+  <data name="Tilburg" xml:space="preserve"><value>Tilburg</value></data>
+  <data name="Denbosch" xml:space="preserve"><value>Den Bosch</value></data>
+  <data name="Back to packages" xml:space="preserve"><value>Terug naar pakketten</value></data>
+  <data name="What's inside" xml:space="preserve"><value>Dit zit erin</value></data>
+  <data name="Contains alcohol" xml:space="preserve"><value>Bevat alcohol</value></data>
+  <data name="Price" xml:space="preserve"><value>Prijs</value></data>
+  <data name="Pick-up from" xml:space="preserve"><value>Ophalen vanaf</value></data>
+  <data name="Available until" xml:space="preserve"><value>Beschikbaar tot</value></data>
+  <data name="Location" xml:space="preserve"><value>Locatie</value></data>
+  <data name="Not known yet" xml:space="preserve"><value>Nog niet bekend</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Available" xml:space="preserve"><value>Beschikbaar</value></data>
+  <data name="Reserve this package" xml:space="preserve"><value>Reserveer dit pakket</value></data>
+  <data name="Edit package" xml:space="preserve"><value>Pakket wijzigen</value></data>
+  <data name="Delete" xml:space="preserve"><value>Verwijderen</value></data>
+  <data name="Save package" xml:space="preserve"><value>Pakket opslaan</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="Back to the package" xml:space="preserve"><value>Terug naar het pakket</value></data>
+  <data name="Save changes" xml:space="preserve"><value>Wijzigingen opslaan</value></data>
+  <data name="Delete package" xml:space="preserve"><value>Pakket verwijderen</value></data>
+  <data name="Are you sure you want to delete &lt;strong&gt;{0}&lt;/strong&gt;? This cannot be undone." xml:space="preserve"><value>Weet je zeker dat je &lt;strong&gt;{0}&lt;/strong&gt; wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</value></data>
+  <data name="Yes, delete" xml:space="preserve"><value>Ja, verwijderen</value></data>
+  <data name="Products" xml:space="preserve"><value>Producten</value></data>
+  <data name="Name" xml:space="preserve"><value>Naam</value></data>
+  <data name="Price (euro)" xml:space="preserve"><value>Prijs (euro)</value></data>
+  <data name="Give the package a name." xml:space="preserve"><value>Geef het pakket een naam.</value></data>
+  <data name="The name can be at most 100 characters." xml:space="preserve"><value>De naam mag maximaal 100 tekens zijn.</value></data>
+  <data name="The price must be between 0 and 100 euros." xml:space="preserve"><value>De prijs moet tussen 0 en 100 euro liggen.</value></data>
+  <data name="The package has been created." xml:space="preserve"><value>Het pakket is aangemaakt.</value></data>
+  <data name="The package has been saved." xml:space="preserve"><value>Het pakket is opgeslagen.</value></data>
+  <data name="The package has been deleted." xml:space="preserve"><value>Het pakket is verwijderd.</value></data>
+  <data name="The package has been reserved." xml:space="preserve"><value>Het pakket is gereserveerd.</value></data>
+  <data name="A reserved package can no longer be edited." xml:space="preserve"><value>Een gereserveerd pakket kan niet meer worden aangepast.</value></data>
+  <data name="Select at least one product." xml:space="preserve"><value>Kies minimaal één product.</value></data>
+  <data name="Available until cannot be before the pick-up time." xml:space="preserve"><value>Beschikbaar tot kan niet voor de ophaaltijd liggen.</value></data>
+</root>

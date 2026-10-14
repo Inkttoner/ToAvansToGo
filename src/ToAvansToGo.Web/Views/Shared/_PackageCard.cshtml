@@ -1,0 +1,57 @@
+@model Package
+@{
+    var reserved = Model.ReservedBy is not null;
+    const int maxPhotos = 5;
+    var shown = Model.Products.Take(maxPhotos).ToList();
+    var extra = Model.Products.Count - shown.Count;
+}
+
+<article class="package-card @(reserved ? "is-reserved" : "")">
+    @if (shown.Any())
+    {
+        <div class="package-card__photos">
+            @foreach (var product in shown)
+            {
+                <img class="package-card__photo" src="~/images/products/@product.Picture"
+                     alt="@product.Name" title="@product.Name" loading="lazy" />
+            }
+            @if (extra > 0)
+            {
+                <span class="package-card__more">+@extra</span>
+            }
+        </div>
+    }
+
+    <div class="package-card__tags">
+        <span class="tag tag-accent-1">@Model.TypeOfMeal</span>
+        @if (Model.Is18Plus)
+        {
+            <span class="tag tag-accent-2">18+</span>
+        }
+        @if (reserved)
+        {
+            <span class="tag tag-outline">Reserved</span>
+        }
+    </div>
+
+    <h2 class="package-card__title">@Model.Name</h2>
+    
+    <p class="package-card__meta">
+        Pictures shown above are an indication for what could be in this package. 
+    </p>
+
+    <p class="package-card__meta">
+        @(Model.PickUpLocation is null
+            ? "Location not known yet"
+            : $"{Model.PickUpLocation.Location}, {Model.PickUpLocation.City.ToDisplayName()}")
+    </p>
+    <p class="package-card__meta">Pick-up from @Model.PickUpTime.ToString("d MMM HH:mm")</p>
+    <p class="package-card__meta">
+        @Model.Products.Count @(Model.Products.Count == 1 ? "product" : "products")
+    </p>
+
+    <div class="package-card__footer">
+        <span class="price">&euro; @Model.Price.ToString("0.00")</span>
+        <a class="btn btn-outline-primary btn-sm" asp-controller="Packages" asp-action="Details" asp-route-id="@Model.Id">View</a>
+    </div>
+</article>

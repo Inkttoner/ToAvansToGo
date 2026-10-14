@@ -9,4 +9,5 @@ public interface ICanteenRepository
     Task AddCanteenAsync(Canteen canteen);
     Task UpdateCanteenAsync(Canteen canteen);
     Task DeleteCanteenAsync(Canteen canteen);
+    Task<List<Canteen>> GetCanteensAsync();
 }

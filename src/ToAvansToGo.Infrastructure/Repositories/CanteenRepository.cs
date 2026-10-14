@@ -7,6 +7,11 @@ namespace ToAvansToGo.Infrastructure.Repositories;
 
 public class CanteenRepository(ApplicationDbContext context) : ICanteenRepository
 {
+    public async Task<List<Canteen>> GetCanteensAsync()
+    {
+        return await context.Canteens.AsNoTracking().ToListAsync();
+    }
+
     public async Task<Canteen> GetCanteenByIdAsync(int id)
     {
         return await context.Canteens.FindAsync(id)

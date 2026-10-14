@@ -1,8 +1,54 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+    var available = Model.AvailableCount;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero">
+    <span class="hero-note">
+        @(available == 1 ? "Now 1 package available" : $"Now {available} packages available")
+    </span>
+    <h1>Food that's left over, for a small price.</h1>
+    <p class="lead">Reserve a package from the canteen and pick it up before it's gone.</p>
+    <a class="btn btn-primary btn-lg" asp-controller="Packages" asp-action="Index">View packages</a>
+</section>
+
+@if (Model.Packages.Any())
+{
+    <section class="preview" aria-label="Sneak peek of available packages">
+        <div class="page-header">
+            <div>
+                <h2 class="h4 mb-1">Sneak peek</h2>
+                <p class="mb-0">A few packages that are ready to be reserved.</p>
+            </div>
+            <a asp-controller="Packages" asp-action="Index">See all packages</a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            @foreach (var package in Model.Packages)
+            {
+                <div class="col">
+                    <partial name="_PackageCard" model="package" />
+                </div>
+            }
+        </div>
+    </section>
+}
+
+<section class="steps" aria-label="How it works">
+    <div class="step">
+        <span class="step-number">1</span>
+        <h2 class="h5">Choose a package</h2>
+        <p class="mb-0">See which packages are waiting in your canteen.</p>
+    </div>
+    <div class="step">
+        <span class="step-number">2</span>
+        <h2 class="h5">Reserve it</h2>
+        <p class="mb-0">Packages with alcohol are only for students aged 18 or older.</p>
+    </div>
+    <div class="step">
+        <span class="step-number">3</span>
+        <h2 class="h5">Pick it up</h2>
+        <p class="mb-0">Come by at the pick-up time and bring your student card.</p>
+    </div>
+</section>

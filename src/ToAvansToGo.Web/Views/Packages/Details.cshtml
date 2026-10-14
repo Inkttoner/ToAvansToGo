@@ -1,0 +1,81 @@
+@model Package
+@{
+    ViewData["Title"] = Model.Name;
+    var reserved = Model.ReservedBy is not null;
+}
+
+<div class="page-header">
+    <div>
+        <a asp-action="Index">Back to packages</a>
+        <h1 class="mt-2">@Model.Name</h1>
+    </div>
+    <div class="package-card__tags">
+        <span class="tag tag-accent-1">@Model.TypeOfMeal</span>
+        @if (Model.Is18Plus)
+        {
+            <span class="tag tag-accent-2">18+</span>
+        }
+        @if (reserved)
+        {
+            <span class="tag tag-outline">Reserved</span>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <section class="panel">
+            <h2 class="h5">What's inside</h2>
+            <ul class="list-unstyled product-list mb-0">
+                @foreach (var product in Model.Products)
+                {
+                    <li class="product-list__item">
+                        <img class="product-list__photo" src="~/images/products/@product.Picture"
+                             alt="@product.Name" loading="lazy" />
+                        <span>
+                            @product.Name
+                            @if (product.HasAlcohol)
+                            {
+                                <span class="tag tag-accent-2 ms-1">Contains alcohol</span>
+                            }
+                        </span>
+                    </li>
+                }
+            </ul>
+            <p class="form-text mt-3 mb-0">Photos are an indication of what a package may contain.</p>
+        </section>
+    </div>
+
+    <div class="col-lg-5">
+        <section class="panel">
+            <dl class="detail-list">
+                <dt>Price</dt>
+                <dd>&euro; @Model.Price.ToString("0.00")</dd>
+                <dt>Pick-up from</dt>
+                <dd>@Model.PickUpTime.ToString("d MMM yyyy HH:mm")</dd>
+                <dt>Available until</dt>
+                <dd>@Model.AvailableTill.ToString("d MMM yyyy HH:mm")</dd>
+                <dt>Location</dt>
+                <dd>
+                    @(Model.PickUpLocation is null
+                        ? "Not known yet"
+                        : $"{Model.PickUpLocation.Location}, {Model.PickUpLocation.City.ToDisplayName()}")
+                </dd>
+                <dt>Status</dt>
+                <dd>@(reserved ? "Reserved" : "Available")</dd>
+            </dl>
+
+            @if (!reserved)
+            {
+                <form asp-action="Reserve" asp-route-id="@Model.Id" method="post" class="mt-4">
+                    <button type="submit" class="btn btn-primary w-100">Reserve this package</button>
+                </form>
+
+                <div class="d-flex gap-2 mt-3">
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit package</a>
+                    <a class="btn btn-outline-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                </div>
+            }
+        </section>
+    </div>
+</div>

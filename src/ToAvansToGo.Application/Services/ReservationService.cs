@@ -17,22 +17,20 @@ public class ReservationService : IReservationService
         _studentRepository = studentRepository;
     }
 
-    public async Task ReservePackage(int packageId, int studentID)
+    public async Task ReservePackage(int packageId, int studentId)
     {
-        var student = await _studentRepository.GetStudentByIdAsync(studentID);
+        var student = await _studentRepository.GetStudentByIdAsync(studentId);
         var package = await _packageRepository.GetPackageByIdAsync(packageId);
-
-        if (package == null)
-            throw new Exception("Package not found");
-        if (student == null)
-            throw new Exception("Student not found");
+        
+        if(package.AvailableTill <  DateTime.Now)
+            throw new InvalidOperationException("Package is no longer available");
 
         if (package.ReservedBy != null)
-            throw new Exception("Package is already reserved");
+            throw new InvalidOperationException("Package is already reserved");
         if (await HasAlreadyReservedOnDateAsync(student, package.PickUpTime))
-            throw new Exception("Student has already reserved a package");
+            throw new InvalidOperationException("Student has already reserved a package");
         if (package.Is18Plus && !IsStudent18Plus(student, package.PickUpTime))
-            throw new Exception("Student is not 18+ and package is");
+            throw new InvalidOperationException("Student is not 18+ and package is");
 
         package.ReservedBy = student;
         await _packageRepository.UpdatePackageAsync(package);

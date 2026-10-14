@@ -1,0 +1,38 @@
+@model IEnumerable<Canteen>
+@{
+    ViewData["Title"] = "Canteens";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Canteens</h1>
+        <p>Pick up your packages here.</p>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state"><p class="mb-0">There are no canteens yet.</p></div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var canteen in Model)
+        {
+            <div class="col">
+                <article class="panel h-100">
+                    <h2 class="h5">@canteen.Location</h2>
+                    <p class="text-secondary">@canteen.City.ToDisplayName()</p>
+                    @if (canteen.HasHotMeals)
+                    {
+                        <span class="tag tag-accent-1">Hot meals</span>
+                    }
+                    else
+                    {
+                        <span class="tag tag-outline">No hot meals</span>
+                    }
+                </article>
+            </div>
+        }
+    </div>
+}

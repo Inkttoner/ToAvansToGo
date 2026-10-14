@@ -1,0 +1,48 @@
+@model PackageIndexViewModel
+@{
+    ViewData["Title"] = "Packages";
+
+    var cities = Enum.GetValues<City>()
+        .Select(c => new SelectListItem(c.ToDisplayName(), ((int)c).ToString())).ToList();
+    var mealTypes = Html.GetEnumSelectList<MealType>();
+}
+
+<div class="page-header">
+    <div>
+        <h1>Packages</h1>
+        <p>Available packages in your city.</p>
+    </div>
+</div>
+
+<form method="get" class="filter-bar">
+    <div>
+        <label asp-for="City" class="form-label">City</label>
+        <select asp-for="City" asp-items="cities" class="form-select"></select>
+    </div>
+    <div>
+        <label asp-for="MealType" class="form-label">Meal type</label>
+        <select asp-for="MealType" asp-items="mealTypes" class="form-select">
+            <option value="">All types</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Apply filter</button>
+</form>
+
+@if (!Model.Packages.Any())
+{
+    <div class="empty-state">
+        <h2 class="h5">No packages found</h2>
+        <p class="mb-0">There are no packages available with these filters. Try another city or meal type.</p>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (var package in Model.Packages)
+        {
+            <div class="col">
+                <partial name="_PackageCard" model="package" />
+            </div>
+        }
+    </div>
+}

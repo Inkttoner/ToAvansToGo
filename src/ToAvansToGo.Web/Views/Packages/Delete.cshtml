@@ -1,0 +1,19 @@
+@model Package
+@{
+    ViewData["Title"] = "Delete package";
+}
+
+<div class="page-header">
+    <div>
+        <a asp-action="Details" asp-route-id="@Model.Id">Back to the package</a>
+        <h1 class="mt-2">Delete package</h1>
+    </div>
+</div>
+
+<section class="panel">
+    <p>Are you sure you want to delete <strong>@Model.Name</strong>? This cannot be undone.</p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Yes, delete</button>
+        <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+    </form>
+</section>
