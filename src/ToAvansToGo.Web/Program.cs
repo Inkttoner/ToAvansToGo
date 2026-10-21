@@ -80,13 +80,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-if (app.Environment.IsDevelopment())
+if (app.Configuration.GetValue<bool>("Seeding:Enabled"))
 {
-    using var scope = app.Services.CreateScope();
-
-    await IdentitySeeder.SeedAsync(
-        scope.ServiceProvider,
-        app.Configuration);
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        await IdentitySeeder.SeedAsync(scope.ServiceProvider, app.Configuration);
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Identity seeding failed");
+    }
 }
 
 app.UseHttpsRedirection();
