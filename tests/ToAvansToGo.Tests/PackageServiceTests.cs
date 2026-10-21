@@ -131,6 +131,7 @@ public class PackageServiceTests
         var packages = new List<Package>() { package1, package2, package3 };
 
         package1.PickUpTime = package1.PickUpTime.AddHours(12);
+        package1.AvailableTill = package1.AvailableTill.AddHours(13);
         _packageRepository.GetPackages().Returns(packages);
         _employeeRepository.GetEmployeeByIdAsync(employee1.Id).Returns(employee1);
         _employeeRepository.GetEmployeeByIdAsync(employee2.Id).Returns(employee2);
@@ -155,6 +156,7 @@ public class PackageServiceTests
         var package1 = CreatePackage(1, MealType.Bread);
 
         package1.PickUpTime = package1.PickUpTime.AddDays(2);
+        package1.AvailableTill = package1.AvailableTill.AddHours(2);
 
         _employeeRepository.GetEmployeeByIdAsync(employee1.Id).Returns(employee1);
 
