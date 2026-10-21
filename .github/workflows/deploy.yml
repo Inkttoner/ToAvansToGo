@@ -56,3 +56,33 @@ jobs:
             --context ToAvansToGoIdentityDbContext \
             --configuration ${{ env.CONFIGURATION }} \
             --output "${{ runner.temp }}/efbundle-identity"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore solution
+        run: dotnet restore ToAvansToGo.sln
+
+      - name: Publish MVC application
+        run: |
+          dotnet publish \
+            src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
+            --configuration Release \
+            --no-restore \
+            --output ./publish
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: cdkr-ToAvansToGo
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
