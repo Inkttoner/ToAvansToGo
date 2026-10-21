@@ -156,7 +156,7 @@ public class PackageServiceTests
         var package1 = CreatePackage(1, MealType.Bread);
 
         package1.PickUpTime = package1.PickUpTime.AddDays(2);
-        package1.AvailableTill = package1.AvailableTill.AddHours(2);
+        package1.AvailableTill = package1.AvailableTill.AddDays(2);
 
         _employeeRepository.GetEmployeeByIdAsync(employee1.Id).Returns(employee1);
 
