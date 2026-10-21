@@ -59,7 +59,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-test
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -67,18 +67,36 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef
 
       - name: Restore solution
         run: dotnet restore ToAvansToGo.sln
 
-      - name: Publish MVC application
+      - name: Create migration bundles
         run: |
-          dotnet publish \
-            src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
-            --configuration Release \
-            --no-restore \
-            --output ./publish
+          dotnet ef migrations bundle \
+            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
+            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
+            --context ApplicationDbContext \
+            --configuration ${{ env.CONFIGURATION }} \
+            --output ./efbundle-app
+          dotnet ef migrations bundle \
+            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
+            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
+            --context ToAvansToGoIdentityDbContext \
+            --configuration ${{ env.CONFIGURATION }} \
+            --output ./efbundle-identity
+
+      - name: Apply migrations
+        run: |
+          ./efbundle-app --connection "${{ secrets.APP_DB_CONNECTION }}"
+          ./efbundle-identity --connection "${{ secrets.IDENTITY_DB_CONNECTION }}"
+
+      - name: Publish MVC application
+        run: dotnet publish src/ToAvansToGo.Web/ToAvansToGo.Web.csproj --configuration Release --no-restore --output ./publish
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
