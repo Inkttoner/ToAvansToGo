@@ -21,7 +21,7 @@ public class PackageService : IPackageService
     public async Task<List<Package>> GetPackagesAsync(City city, MealType? mealType)
     {
         var packages = await _packageRepository.GetPackages();
-        var result = packages.Where(p => p.PickUpLocation?.City == city && p.ReservedBy == null && p.AvailableTill > DateTime.Now);
+        var result = packages.Where(p => p.PickUpLocation?.City == city && p.ReservedBy == null && p.PickUpTime > DateTime.Now);
 
         if (mealType != null)
         {
@@ -76,6 +76,8 @@ public class PackageService : IPackageService
     public async Task CreatePackageAsync(Package package, int employeeId)
     {
         var employee = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
+        ValidateTimes(package);
+
         if ((package.PickUpTime.Date - DateTime.Today).Days > 2)
         {
             throw new InvalidOperationException(
@@ -85,6 +87,7 @@ public class PackageService : IPackageService
 
         package.PickUpLocation = employee.Location;
         package.Is18Plus = package.Products.Any(p => p.HasAlcohol);
+        
         await _packageRepository.AddPackageAsync(package);
     }
 
@@ -92,8 +95,9 @@ public class PackageService : IPackageService
     {
         if (package.ReservedBy != null)
             throw new InvalidOperationException("Package is reserved and can not be edited");
-
+        ValidateTimes(package);
         package.Is18Plus = package.Products.Any(p => p.HasAlcohol);
+        
         await _packageRepository.UpdatePackageAsync(package);
     }
 
@@ -102,5 +106,19 @@ public class PackageService : IPackageService
         if (package.ReservedBy != null)
             throw new InvalidOperationException("Package is reserved and can not be deleted");
         await _packageRepository.DeletePackageAsync(package);
+    }
+    
+    private static void ValidateTimes(Package package)
+    {
+        var now = DateTime.Now;
+
+        if (package.PickUpTime < now)
+            throw new InvalidOperationException("The pick-up time cannot be in the past");
+
+        if (package.AvailableTill < package.PickUpTime)
+            throw new InvalidOperationException("Available until cannot be before the pick-up time");
+
+        if ((package.PickUpTime.Date - now.Date).Days > 2)
+            throw new InvalidOperationException("A package can not be created more than 2 days in advance");
     }
 }

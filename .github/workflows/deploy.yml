@@ -38,24 +38,6 @@ jobs:
 
       - name: Run tests
         run: dotnet test ToAvansToGo.sln --configuration ${{ env.CONFIGURATION }} --no-build
-
-      - name: Create application migration bundle
-        run: |
-          dotnet ef migrations bundle \
-            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
-            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
-            --context ApplicationDbContext \
-            --configuration ${{ env.CONFIGURATION }} \
-            --output "${{ runner.temp }}/efbundle-app"
-
-      - name: Create Identity migration bundle
-        run: |
-          dotnet ef migrations bundle \
-            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
-            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
-            --context ToAvansToGoIdentityDbContext \
-            --configuration ${{ env.CONFIGURATION }} \
-            --output "${{ runner.temp }}/efbundle-identity"
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-test
