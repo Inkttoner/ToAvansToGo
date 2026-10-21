@@ -1,0 +1,58 @@
+﻿
+name: ToAvansToGo CI/CD
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  CONFIGURATION: Release
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Restore solution
+        run: dotnet restore ToAvansToGo.sln
+
+      - name: Build solution
+        run: dotnet build ToAvansToGo.sln --configuration ${{ env.CONFIGURATION }} --no-restore
+
+      - name: Run tests
+        run: dotnet test ToAvansToGo.sln --configuration ${{ env.CONFIGURATION }} --no-build
+
+      - name: Create application migration bundle
+        run: |
+          dotnet ef migrations bundle \
+            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
+            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
+            --context ApplicationDbContext \
+            --configuration ${{ env.CONFIGURATION }} \
+            --output "${{ runner.temp }}/efbundle-app"
+
+      - name: Create Identity migration bundle
+        run: |
+          dotnet ef migrations bundle \
+            --project src/ToAvansToGo.Infrastructure/ToAvansToGo.Infrastructure.csproj \
+            --startup-project src/ToAvansToGo.Web/ToAvansToGo.Web.csproj \
+            --context ToAvansToGoIdentityDbContext \
+            --configuration ${{ env.CONFIGURATION }} \
+            --output "${{ runner.temp }}/efbundle-identity"
