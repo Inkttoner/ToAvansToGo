@@ -1,0 +1,32 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": { "title": "ToAvansToGo GraphQL API", "version": "v1",
+    "description": "Queries: packages(city, mealType) and package(id)" },
+  "paths": {
+    "/graphql": {
+      "post": {
+        "summary": "Execute a GraphQL query",
+        "security": [ { "Bearer": [] } ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": {
+            "schema": { "$ref": "#/components/schemas/GraphQlRequest" },
+            "examples": {
+              "packages": { "value": { "query": "{ packages(city: BREDA) { id name pickUpTime price is18Plus products { name hasAlcohol } } }" } },
+              "package":  { "value": { "query": "{ package(id: 1) { id name products { name } } }" } }
+            } } }
+        },
+        "responses": {
+          "200": { "description": "Query result" },
+          "400": { "description": "Invalid query" },
+          "401": { "description": "Missing or invalid token" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": { "Bearer": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
+    "schemas": { "GraphQlRequest": { "type": "object", "required": ["query"],
+      "properties": { "query": { "type": "string" }, "variables": { "type": "object", "nullable": true } } } }
+  }
+}

@@ -4,8 +4,13 @@ using ToAvansToGo.Infrastructure.Data;
 using ToAvansToGo.Infrastructure.Repositories;
 using ToAvansToGo.Application.Services;
 using System.Globalization;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using ToAvansToGo.Web.GraphQL;
 using ToAvansToGo.Infrastructure.Identity;
 using ToAvansToGo.Web;
@@ -48,11 +53,36 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+    {
+        options.RespectBrowserAcceptHeader = true;
+        options.ReturnHttpNotAcceptable = true;
+    })
+    .AddXmlDataContractSerializerFormatters()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization(options =>
         options.DataAnnotationLocalizerProvider = (type, factory) =>
             factory.Create(typeof(SharedResource)));
+
+builder.Services.AddAuthentication()
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            ValidateLifetime = true,
+            NameClaimType = ClaimTypes.NameIdentifier,
+            RoleClaimType = ClaimTypes.Role
+        };
+    });
+
+
 
 // 4. Repositories (interface -> implementatie)
 builder.Services.AddScoped<ICanteenRepository, CanteenRepository>();
@@ -64,10 +94,26 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 // 5. Services
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
-builder.Services.AddOpenApi(options =>
+builder.Services.AddSwaggerGen(options =>
 {
-    options.ShouldInclude = description => description.RelativePath?.StartsWith("api/") == true;
-});
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ToAvansToGo API", Version = "v1" });
+    
+    options.DocInclusionPredicate((_, api) => api.RelativePath?.StartsWith("api/") == true);
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Paste the token from POST /api/login"
+    });
+
+    options.AddSecurityRequirement(document =>
+        new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+        });
+    });
 
 // 6. GraphQL
 builder.Services.AddGraphQLServer().AddQueryType<PackageQuery>();
@@ -98,8 +144,12 @@ if (app.Configuration.GetValue<bool>("Seeding:Enabled"))
         app.Logger.LogError(ex, "Identity seeding failed");
     }
 }
-app.MapOpenApi();
-app.UseSwaggerUI(o => o.SwaggerEndpoint("/openapi/v1.json", "ToAvansToGo API"));
+app.UseSwagger();
+app.UseSwaggerUI(o =>
+{
+    o.SwaggerEndpoint("/swagger/v1/swagger.json", "REST API");
+    o.SwaggerEndpoint("/docs/graphql-openapi.json", "GraphQL API");   
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
