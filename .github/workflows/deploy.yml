@@ -27,9 +27,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef
-
       - name: Restore solution
         run: dotnet restore ToAvansToGo.sln
 
@@ -52,7 +49,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef
+        run: dotnet tool install --global dotnet-ef --version 8.*
 
       - name: Restore solution
         run: dotnet restore ToAvansToGo.sln
@@ -78,7 +75,12 @@ jobs:
           ./efbundle-identity --connection "${{ secrets.IDENTITY_DB_CONNECTION }}"
 
       - name: Publish MVC application
-        run: dotnet publish src/ToAvansToGo.Web/ToAvansToGo.Web.csproj --configuration Release --no-restore --output ./publish
+        run: >
+          dotnet publish src/ToAvansToGo.Web/ToAvansToGo.Web.csproj
+          --configuration Release
+          --framework net8.0
+          --no-restore
+          --output ./publish
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
