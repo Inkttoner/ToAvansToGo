@@ -64,6 +64,10 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 // 5. Services
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddOpenApi(options =>
+{
+    options.ShouldInclude = description => description.RelativePath?.StartsWith("api/") == true;
+});
 
 // 6. GraphQL
 builder.Services.AddGraphQLServer().AddQueryType<PackageQuery>();
@@ -94,6 +98,8 @@ if (app.Configuration.GetValue<bool>("Seeding:Enabled"))
         app.Logger.LogError(ex, "Identity seeding failed");
     }
 }
+app.MapOpenApi();
+app.UseSwaggerUI(o => o.SwaggerEndpoint("/openapi/v1.json", "ToAvansToGo API"));
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

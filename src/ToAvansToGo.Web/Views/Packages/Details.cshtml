@@ -65,17 +65,21 @@
                 <dd>@(reserved ? "Reserved" : "Available")</dd>
             </dl>
 
-            @if (!reserved)
+            @if (!reserved && User.IsInRole("Student"))
             {
                 <form asp-action="Reserve" asp-route-id="@Model.Id" method="post" class="mt-4">
                     <button type="submit" class="btn btn-primary w-100">Reserve this package</button>
                 </form>
-
-                <div class="d-flex gap-2 mt-3">
-                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit package</a>
-                    <a class="btn btn-outline-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-                </div>
             }
+
+            <div class="d-flex gap-2 mt-3">
+                @if (User.IsInRole("Employee"))
+                {
+                    <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit package</a>
+
+                    <a class="btn btn-outline-primary" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                }
+            </div>
         </section>
     </div>
 </div>
