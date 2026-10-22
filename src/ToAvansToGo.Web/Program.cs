@@ -6,6 +6,7 @@ using ToAvansToGo.Application.Services;
 using System.Globalization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using ToAvansToGo.Web.GraphQL;
 using ToAvansToGo.Infrastructure.Identity;
 using ToAvansToGo.Web;
 
@@ -64,7 +65,8 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IPackageService, PackageService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 
-
+// 6. GraphQL
+builder.Services.AddGraphQLServer().AddQueryType<PackageQuery>();
 
 var app = builder.Build();
 app.UseRequestLocalization(new RequestLocalizationOptions
@@ -102,5 +104,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
+
+app.MapGraphQL("/graphql");
 
 app.Run();
