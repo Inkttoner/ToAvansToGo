@@ -73,12 +73,12 @@ public class ReservationServiceTests
         // Act
         await _reservationService.ReservePackage(package1.Id, student.Id);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+        var exception = await Assert.ThrowsAnyAsync<InvalidOperationException>(() =>
             _reservationService.ReservePackage(package2.Id, student.Id)
         );
 
         // Assert
-        Assert.Equal("Student has already reserved a package", exception.Message);
+        Assert.Equal("Student has already reserved a package on this date", exception.Message);
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class ReservationServiceTests
         _packageRepository.GetPackages().Returns(packages);
 
         //Act
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+        var exception = await Assert.ThrowsAnyAsync<InvalidOperationException>(() =>
             _reservationService.ReservePackage(package1.Id, student.Id)
         );
 
@@ -121,7 +121,7 @@ public class ReservationServiceTests
 
         //Act
         await _reservationService.ReservePackage(package1.Id, student1.Id);
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+        var exception = await Assert.ThrowsAnyAsync<InvalidOperationException>(() =>
             _reservationService.ReservePackage(package1.Id, student2.Id)
         );
 
