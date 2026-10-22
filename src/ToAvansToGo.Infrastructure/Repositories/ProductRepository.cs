@@ -9,7 +9,7 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
 {
     public async Task<List<Product>> GetProductsAsync()
     {
-        return await context.Products.AsNoTracking().ToListAsync();
+        return await context.Products.ToListAsync();
     }
 
     public async Task<Product> GetProductByIdAsync(int id)
